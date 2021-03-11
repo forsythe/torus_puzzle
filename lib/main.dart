@@ -46,7 +46,7 @@ String formatTime(int ms) {
   var secs = ms ~/ 1000;
   var minutes = ((secs % 3600) ~/ 60).toString().padLeft(2, '0');
   var seconds = (secs % 60).toString().padLeft(2, '0');
-  return "$minutes:$seconds:$msecs";
+  return "$minutes:$seconds.$msecs";
 }
 
 int clamp(int val, int minInclusive, int maxExclusive) {
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     timer = new Timer.periodic(new Duration(milliseconds: 100), (timer) {
       setState(() {});
     });
-    scramble();
+//    scramble();
   }
 
   @override
@@ -110,10 +110,13 @@ class _MyHomePageState extends State<MyHomePage> {
     tileValues = new List<int>.generate(puzzleDim * puzzleDim, (i) => (i + 1));
     var rng = new Random();
 
-    for (var i = 0; i < 10; i++) {
-      columnOffset(rng.nextInt(puzzleDim), rng.nextInt(puzzleDim));
-      rowOffset(rng.nextInt(puzzleDim), rng.nextInt(puzzleDim));
-    }
+    do {
+      for (var i = 0; i < 10; i++) {
+        columnOffset(rng.nextInt(puzzleDim), rng.nextInt(puzzleDim));
+        rowOffset(rng.nextInt(puzzleDim), rng.nextInt(puzzleDim));
+      }
+    } while (isSolved());
+
     solved = false;
     stopwatch.stop();
     stopwatch.reset();
@@ -163,40 +166,38 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             : Text("Torus Puzzle"),
         actions: <Widget>[
-          Tooltip(
-            message: "I give up!",
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: isSolved()
-                    ? null
-                    : () {
-                        setState(() {
-                          reset();
-                        });
-                      },
-                child: Icon(
-                  Icons.outlined_flag,
+          if (!isSolved())
+            Tooltip(
+              message: "I give up!",
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      reset();
+                    });
+                  },
+                  child: Text("I give up!"),
                 ),
               ),
             ),
-          ),
-          Tooltip(
-            message: "Shuffle",
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    scramble();
-                  });
-                },
-                child: Icon(
-                  Icons.shuffle,
+          if (isSolved())
+            Tooltip(
+              message: "Shuffle",
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                  color: Colors.green,
+                  onPressed: () {
+                    setState(() {
+                      scramble();
+                    });
+                  },
+                  child: Text("Start"),
                 ),
               ),
             ),
-          ),
           Tooltip(
             message: "Instructions",
             child: Padding(
@@ -256,50 +257,56 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           constraints: BoxConstraints(maxWidth: 500, maxHeight: 500),
           child: GestureDetector(
-            onPanDown: (details) {
-              stopwatch.start();
+            onPanDown: isSolved()
+                ? null
+                : (details) {
+                    stopwatch.start();
 
-              gridYStart = containerKey.globalPaintBounds.top;
-              gridXStart = containerKey.globalPaintBounds.left;
-              tileSize = (containerKey.globalPaintBounds.right -
-                      containerKey.globalPaintBounds.left) /
-                  puzzleDim;
+                    gridYStart = containerKey.globalPaintBounds.top;
+                    gridXStart = containerKey.globalPaintBounds.left;
+                    tileSize = (containerKey.globalPaintBounds.right -
+                            containerKey.globalPaintBounds.left) /
+                        puzzleDim;
 
-              prevRow = ((details.globalPosition.dy - gridYStart) ~/ tileSize);
-              prevCol = ((details.globalPosition.dx - gridXStart) ~/ tileSize);
-            },
-            onPanUpdate: (details) {
-              int newRow =
-                  ((details.globalPosition.dy - gridYStart) ~/ tileSize);
-              int newCol =
-                  ((details.globalPosition.dx - gridXStart) ~/ tileSize);
-              newRow = clamp(newRow, 0, puzzleDim);
-              newCol = clamp(newCol, 0, puzzleDim);
+                    prevRow =
+                        ((details.globalPosition.dy - gridYStart) ~/ tileSize);
+                    prevCol =
+                        ((details.globalPosition.dx - gridXStart) ~/ tileSize);
+                  },
+            onPanUpdate: isSolved()
+                ? null
+                : (details) {
+                    int newRow =
+                        ((details.globalPosition.dy - gridYStart) ~/ tileSize);
+                    int newCol =
+                        ((details.globalPosition.dx - gridXStart) ~/ tileSize);
+                    newRow = clamp(newRow, 0, puzzleDim);
+                    newCol = clamp(newCol, 0, puzzleDim);
 
-              if (newRow != prevRow && newCol != prevCol) {
-                return; //don't support diagonal drags
-              }
+                    if (newRow != prevRow && newCol != prevCol) {
+                      return; //don't support diagonal drags
+                    }
 
-              if (newRow != prevRow) {
-                setState(() {
-                  columnOffset(newCol, newRow - prevRow);
-                });
-                prevRow = newRow;
-              }
-              if (newCol != prevCol) {
-                setState(() {
-                  rowOffset(newRow, newCol - prevCol);
-                });
-                prevCol = newCol;
-              }
-              setState(() {
-                bool prevSolved = solved;
-                solved = isSolved();
-                if (!prevSolved && solved) {
-                  stopwatch.stop();
-                }
-              });
-            },
+                    if (newRow != prevRow) {
+                      setState(() {
+                        columnOffset(newCol, newRow - prevRow);
+                      });
+                      prevRow = newRow;
+                    }
+                    if (newCol != prevCol) {
+                      setState(() {
+                        rowOffset(newRow, newCol - prevCol);
+                      });
+                      prevCol = newCol;
+                    }
+                    setState(() {
+                      bool prevSolved = solved;
+                      solved = isSolved();
+                      if (!prevSolved && solved) {
+                        stopwatch.stop();
+                      }
+                    });
+                  },
             child: GridView.count(
               physics: ClampingScrollPhysics(),
               key: containerKey,
