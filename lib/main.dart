@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<int> tileValues =
       new List<int>.generate(puzzleDim * puzzleDim, (i) => (i + 1));
 
-  void initState(){
+  void initState() {
     super.initState();
     scramble();
   }
@@ -131,13 +131,13 @@ class _MyHomePageState extends State<MyHomePage> {
             message: "I give up!",
             child: MaterialButton(
               onPressed: () {
-                  setState(() {
-                    reset();
-                  });
-                },
+                setState(() {
+                  reset();
+                });
+              },
               child: Icon(
-                  Icons.outlined_flag,
-                ),
+                Icons.outlined_flag,
+              ),
             ),
           ),
           Tooltip(
@@ -157,35 +157,35 @@ class _MyHomePageState extends State<MyHomePage> {
             message: "Instructions",
             child: MaterialButton(
               onPressed: () {
-                  return showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Instructions'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text(
-                                  'The grid of numbers lie on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
-                            ],
-                          ),
+                return showDialog<void>(
+                  context: context,
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Instructions'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text(
+                                'The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
+                          ],
                         ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Got it!'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Got it!'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               child: Icon(
-                  Icons.info,
-                ),
+                Icons.info,
+              ),
             ),
           ),
           PopupMenuButton<int>(
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
             primary: true,
             crossAxisCount: puzzleDim,
             children: tileValues.map((e) {
-              int intensity = 150 - 100 ~/ (puzzleDim * puzzleDim) * e;
+              int intensity = 100 - 90 ~/ (puzzleDim * puzzleDim) * e;
               return MouseRegion(
                 cursor: SystemMouseCursors.move,
                 onExit: (event) => {
@@ -269,11 +269,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.all(4),
+                    margin: EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                        border: hoveringOver == e
-                            ? Border.all(color: Colors.grey, width: 4)
-                            : null,
+                        border: Border.all(
+                            color: Colors.white70,
+                            width: hoveringOver == e ? 4 : 0.5),
                         color: new Color.fromRGBO(
                             solved ? intensity ~/ 1.5 : intensity,
                             intensity,
@@ -284,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: FittedBox(
                       child: Text(
                         e.toString(),
-                        style: TextStyle(fontSize: 50),
+                        style: TextStyle(fontSize: 35),
                       ),
                       fit: BoxFit.fitWidth,
                     )),
