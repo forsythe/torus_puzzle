@@ -64,7 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //for logic involving tile shifts
   int prevRow = 0;
+  int newRow = 0;
   int prevCol = 0;
+  int newCol = 0;
 
   //for rendering
   double tileSize = 0;
@@ -72,18 +74,24 @@ class _MyHomePageState extends State<MyHomePage> {
   double gridXStart = 0;
   int hoveringOver;
   final containerKey = GlobalKey();
+  List<Offset> offsets = [];
+  int dragState = -1; //-1 undefined, 0 vertical, 1 horizontal
 
   List<int> tileValues =
       new List<int>.generate(puzzleDim * puzzleDim, (i) => (i + 1));
 
   void initState() {
     super.initState();
-
+    resetOffsets();
     stopwatch = Stopwatch();
     timer = new Timer.periodic(new Duration(milliseconds: 100), (timer) {
       setState(() {});
     });
 //    scramble();
+  }
+
+  void resetOffsets() {
+    offsets = List.filled(puzzleDim * puzzleDim, Offset.zero);
   }
 
   @override
@@ -257,48 +265,61 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           constraints: BoxConstraints(maxWidth: 500, maxHeight: 500),
           child: GestureDetector(
-            onPanDown: isSolved()
+            onHorizontalDragDown: isSolved()
                 ? null
-                : (details) {
+                : (d) {
                     stopwatch.start();
-
-                    gridYStart = containerKey.globalPaintBounds.top;
                     gridXStart = containerKey.globalPaintBounds.left;
                     tileSize = (containerKey.globalPaintBounds.right -
                             containerKey.globalPaintBounds.left) /
                         puzzleDim;
-
-                    prevRow =
-                        ((details.globalPosition.dy - gridYStart) ~/ tileSize);
-                    prevCol =
-                        ((details.globalPosition.dx - gridXStart) ~/ tileSize);
+                    prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
+                    prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
                   },
-            onPanUpdate: isSolved()
+            onVerticalDragDown: isSolved()
                 ? null
-                : (details) {
-                    int newRow =
-                        ((details.globalPosition.dy - gridYStart) ~/ tileSize);
-                    int newCol =
-                        ((details.globalPosition.dx - gridXStart) ~/ tileSize);
+                : (d) {
+                    stopwatch.start();
+                    gridYStart = containerKey.globalPaintBounds.top;
+                    tileSize = (containerKey.globalPaintBounds.right -
+                            containerKey.globalPaintBounds.left) /
+                        puzzleDim;
+                    prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
+                    prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+                  },
+            onHorizontalDragEnd: (details) {
+              if (prevCol != newCol) {
+                setState(() {
+                  rowOffset(newRow, newCol - prevCol);
+                });
+
+                prevCol = newCol;
+              }
+              resetOffsets();
+            },
+            onVerticalDragEnd: (details) {
+              if (newRow != prevRow) {
+                setState(() {
+                  columnOffset(newCol, newRow - prevRow);
+                });
+                prevRow = newRow;
+              }
+              resetOffsets();
+            },
+            onHorizontalDragUpdate: isSolved()
+                ? null
+                : (d) {
+                    newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
                     newRow = clamp(newRow, 0, puzzleDim);
+                    newCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
                     newCol = clamp(newCol, 0, puzzleDim);
+                    setState(() {
+                      for (int i in new List<int>.generate(
+                          puzzleDim, (i) => i + puzzleDim * newRow)) {
+                        offsets[tileValues[i] - 1] += Offset(d.delta.dx, 0);
+                      }
+                    });
 
-                    if (newRow != prevRow && newCol != prevCol) {
-                      return; //don't support diagonal drags
-                    }
-
-                    if (newRow != prevRow) {
-                      setState(() {
-                        columnOffset(newCol, newRow - prevRow);
-                      });
-                      prevRow = newRow;
-                    }
-                    if (newCol != prevCol) {
-                      setState(() {
-                        rowOffset(newRow, newCol - prevCol);
-                      });
-                      prevCol = newCol;
-                    }
                     setState(() {
                       bool prevSolved = solved;
                       solved = isSolved();
@@ -307,6 +328,28 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
                     });
                   },
+            onVerticalDragUpdate: (d) {
+              newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+              newRow = clamp(newRow, 0, puzzleDim);
+
+              newCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
+              newCol = clamp(newCol, 0, puzzleDim);
+              setState(() {
+                for (int i in new List<int>.generate(
+                    puzzleDim, (i) => i * puzzleDim + newCol)) {
+                  offsets[tileValues[i] - 1] += Offset(0, d.delta.dy);
+                }
+              //TODO: when sliding, make the other side re-appear
+              });
+
+              setState(() {
+                bool prevSolved = solved;
+                solved = isSolved();
+                if (!prevSolved && solved) {
+                  stopwatch.stop();
+                }
+              });
+            },
             child: GridView.count(
               physics: ClampingScrollPhysics(),
               key: containerKey,
@@ -316,39 +359,42 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisCount: puzzleDim,
               children: tileValues.map((e) {
                 int intensity = 100 - 90 ~/ (puzzleDim * puzzleDim) * e;
-                return MouseRegion(
-                  cursor: SystemMouseCursors.move,
-                  onExit: (event) => {
-                    setState(() {
-                      hoveringOver = -1;
-                    })
-                  },
-                  onHover: (event) => {
-                    setState(() {
-                      hoveringOver = e;
-                    })
-                  },
-                  opaque: false,
-                  child: Container(
-                    margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.white70,
-                            width: hoveringOver == e ? 4 : 0.5),
-                        color: new Color.fromRGBO(
-                            solved ? intensity ~/ 1.5 : intensity,
-                            intensity,
-                            solved ? intensity ~/ 1.5 : intensity,
-                            1),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Center(
-                        child: FittedBox(
-                      child: Text(
-                        e.toString(),
-                        style: TextStyle(fontSize: 35),
-                      ),
-                      fit: BoxFit.fitWidth,
-                    )),
+                return Transform.translate(
+                  offset: offsets[e - 1],
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.move,
+                    onExit: (event) => {
+                      setState(() {
+                        hoveringOver = -1;
+                      })
+                    },
+                    onHover: (event) => {
+                      setState(() {
+                        hoveringOver = e;
+                      })
+                    },
+                    opaque: false,
+                    child: Container(
+                      margin: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.white70,
+                              width: hoveringOver == e ? 4 : 0.5),
+                          color: new Color.fromRGBO(
+                              solved ? intensity ~/ 1.5 : intensity,
+                              intensity,
+                              solved ? intensity ~/ 1.5 : intensity,
+                              1),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Center(
+                          child: FittedBox(
+                        child: Text(
+                          e.toString(),
+                          style: TextStyle(fontSize: 35),
+                        ),
+                        fit: BoxFit.fitWidth,
+                      )),
+                    ),
                   ),
                 );
               }).toList(),
