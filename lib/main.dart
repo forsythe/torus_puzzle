@@ -96,7 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     for (int k = 0; k < tileValues.length - 1; k++) {
       if (tileValues[k] > tileValues[k + 1]) return false;
     }
-    stopwatch.stop();
     return true;
   }
 
@@ -104,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     tileValues = new List<int>.generate(puzzleDim * puzzleDim, (i) => (i + 1));
     solved = true;
     stopwatch?.stop();
+    stopwatch?.reset();
   }
 
   void scramble() {
@@ -116,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     solved = false;
     stopwatch.stop();
+    stopwatch.reset();
   }
 
   void columnOffset(int column, int offset) {
@@ -165,11 +166,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Tooltip(
             message: "I give up!",
             child: MaterialButton(
-              onPressed: () {
-                setState(() {
-                  reset();
-                });
-              },
+              onPressed: isSolved()
+                  ? null
+                  : () {
+                      setState(() {
+                        reset();
+                      });
+                    },
               child: Icon(
                 Icons.outlined_flag,
               ),
@@ -281,7 +284,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 prevCol = newCol;
               }
               setState(() {
+                bool prevSolved = solved;
                 solved = isSolved();
+                if (!prevSolved && solved) {
+                  stopwatch.stop();
+                }
               });
             },
             child: GridView.count(
