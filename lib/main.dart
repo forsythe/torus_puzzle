@@ -165,64 +165,73 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           Tooltip(
             message: "I give up!",
-            child: MaterialButton(
-              onPressed: isSolved()
-                  ? null
-                  : () {
-                      setState(() {
-                        reset();
-                      });
-                    },
-              child: Icon(
-                Icons.outlined_flag,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: isSolved()
+                    ? null
+                    : () {
+                        setState(() {
+                          reset();
+                        });
+                      },
+                child: Icon(
+                  Icons.outlined_flag,
+                ),
               ),
             ),
           ),
           Tooltip(
             message: "Shuffle",
-            child: MaterialButton(
-              onPressed: () {
-                setState(() {
-                  scramble();
-                });
-              },
-              child: Icon(
-                Icons.shuffle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    scramble();
+                  });
+                },
+                child: Icon(
+                  Icons.shuffle,
+                ),
               ),
             ),
           ),
           Tooltip(
             message: "Instructions",
-            child: MaterialButton(
-              onPressed: () {
-                return showDialog<void>(
-                  context: context,
-                  barrierDismissible: false, // user must tap button!
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Instructions'),
-                      content: SingleChildScrollView(
-                        child: ListBody(
-                          children: <Widget>[
-                            Text(
-                                'The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
-                          ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  return showDialog<void>(
+                    context: context,
+                    barrierDismissible: false, // user must tap button!
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Instructions'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              Text(
+                                  'The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
+                            ],
+                          ),
                         ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Got it!'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Icon(
-                Icons.info,
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Got it!'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Icon(
+                  Icons.info,
+                ),
               ),
             ),
           ),
