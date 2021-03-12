@@ -1,0 +1,1644 @@
+define(['dart_sdk', 'packages/flutter/src/material/app.dart', 'packages/flutter/src/material/icon_button.dart', 'packages/flutter/src/widgets/widget_span.dart', 'packages/flutter/src/painting/edge_insets.dart', 'packages/flutter/src/material/colors.dart', 'packages/flutter/src/widgets/single_child_scroll_view.dart', 'packages/flutter/src/widgets/icon.dart', 'packages/flutter/src/material/icons.dart', 'packages/flutter/src/material/popup_menu.dart', 'packages/flutter/src/rendering/layer.dart', 'packages/flutter/src/gestures/drag_details.dart', 'packages/flutter/src/widgets/scroll_view.dart', 'packages/flutter/src/gestures/events.dart', 'packages/flutter/src/painting/box_decoration.dart', 'packages/flutter/src/painting/box_border.dart', 'packages/flutter/src/painting/border_radius.dart', 'packages/flutter/src/painting/strut_style.dart', 'packages/flutter/src/painting/box_fit.dart'], (function load__packages__torus_puzzle__main_dart(dart_sdk, packages__flutter__src__material__app$46dart, packages__flutter__src__material__icon_button$46dart, packages__flutter__src__widgets__widget_span$46dart, packages__flutter__src__painting__edge_insets$46dart, packages__flutter__src__material__colors$46dart, packages__flutter__src__widgets__single_child_scroll_view$46dart, packages__flutter__src__widgets__icon$46dart, packages__flutter__src__material__icons$46dart, packages__flutter__src__material__popup_menu$46dart, packages__flutter__src__rendering__layer$46dart, packages__flutter__src__gestures__drag_details$46dart, packages__flutter__src__widgets__scroll_view$46dart, packages__flutter__src__gestures__events$46dart, packages__flutter__src__painting__box_decoration$46dart, packages__flutter__src__painting__box_border$46dart, packages__flutter__src__painting__border_radius$46dart, packages__flutter__src__painting__strut_style$46dart, packages__flutter__src__painting__box_fit$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const async = dart_sdk.async;
+  const math = dart_sdk.math;
+  const _interceptors = dart_sdk._interceptors;
+  const collection = dart_sdk.collection;
+  const ui = dart_sdk.ui;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const app = packages__flutter__src__material__app$46dart.src__material__app;
+  const theme_data = packages__flutter__src__material__icon_button$46dart.src__material__theme_data;
+  const scaffold = packages__flutter__src__material__icon_button$46dart.src__material__scaffold;
+  const app_bar = packages__flutter__src__material__icon_button$46dart.src__material__app_bar;
+  const tooltip = packages__flutter__src__material__icon_button$46dart.src__material__tooltip;
+  const material_button = packages__flutter__src__material__icon_button$46dart.src__material__material_button;
+  const dialog = packages__flutter__src__material__icon_button$46dart.src__material__dialog;
+  const text_button = packages__flutter__src__material__icon_button$46dart.src__material__text_button;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const text = packages__flutter__src__widgets__widget_span$46dart.src__widgets__text;
+  const basic = packages__flutter__src__widgets__widget_span$46dart.src__widgets__basic;
+  const gesture_detector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__gesture_detector;
+  const navigator = packages__flutter__src__widgets__widget_span$46dart.src__widgets__navigator;
+  const container = packages__flutter__src__widgets__widget_span$46dart.src__widgets__container;
+  const scroll_physics = packages__flutter__src__widgets__widget_span$46dart.src__widgets__scroll_physics;
+  const binding = packages__flutter__src__widgets__widget_span$46dart.src__widgets__binding;
+  const edge_insets = packages__flutter__src__painting__edge_insets$46dart.src__painting__edge_insets;
+  const colors = packages__flutter__src__material__colors$46dart.src__material__colors;
+  const single_child_scroll_view = packages__flutter__src__widgets__single_child_scroll_view$46dart.src__widgets__single_child_scroll_view;
+  const icon = packages__flutter__src__widgets__icon$46dart.src__widgets__icon;
+  const icons = packages__flutter__src__material__icons$46dart.src__material__icons;
+  const popup_menu = packages__flutter__src__material__popup_menu$46dart.src__material__popup_menu;
+  const box = packages__flutter__src__rendering__layer$46dart.src__rendering__box;
+  const mouse_cursor = packages__flutter__src__rendering__layer$46dart.src__rendering__mouse_cursor;
+  const drag_details = packages__flutter__src__gestures__drag_details$46dart.src__gestures__drag_details;
+  const scroll_view = packages__flutter__src__widgets__scroll_view$46dart.src__widgets__scroll_view;
+  const events = packages__flutter__src__gestures__events$46dart.src__gestures__events;
+  const box_decoration = packages__flutter__src__painting__box_decoration$46dart.src__painting__box_decoration;
+  const box_border = packages__flutter__src__painting__box_border$46dart.src__painting__box_border;
+  const border_radius = packages__flutter__src__painting__border_radius$46dart.src__painting__border_radius;
+  const text_style = packages__flutter__src__painting__strut_style$46dart.src__painting__text_style;
+  const box_fit = packages__flutter__src__painting__box_fit$46dart.src__painting__box_fit;
+  var main = Object.create(dart.library);
+  var $length = dartx.length;
+  var $_get = dartx._get;
+  var $modulo = dartx['%'];
+  var $sublist = dartx.sublist;
+  var $addAll = dartx.addAll;
+  var $_set = dartx._set;
+  var $add = dartx.add;
+  var $toString = dartx.toString;
+  var $map = dartx.map;
+  var $toList = dartx.toList;
+  var $truncate = dartx.truncate;
+  var $padLeft = dartx.padLeft;
+  dart._checkModuleNullSafetyMode(false);
+  var T = {
+    _LocationL: () => (T._LocationL = dart.constFn(dart.legacy(widget_inspector._Location)))(),
+    StatefulWidgetL: () => (T.StatefulWidgetL = dart.constFn(dart.legacy(framework.StatefulWidget)))(),
+    StateOfStatefulWidgetL: () => (T.StateOfStatefulWidgetL = dart.constFn(framework.State$(T.StatefulWidgetL())))(),
+    StateLOfStatefulWidgetL: () => (T.StateLOfStatefulWidgetL = dart.constFn(dart.legacy(T.StateOfStatefulWidgetL())))(),
+    GlobalKeyOfStateLOfStatefulWidgetL: () => (T.GlobalKeyOfStateLOfStatefulWidgetL = dart.constFn(framework.GlobalKey$(T.StateLOfStatefulWidgetL())))(),
+    intL: () => (T.intL = dart.constFn(dart.legacy(core.int)))(),
+    ListOfintL: () => (T.ListOfintL = dart.constFn(core.List$(T.intL())))(),
+    intLTointL: () => (T.intLTointL = dart.constFn(dart.fnType(T.intL(), [T.intL()])))(),
+    VoidToNull: () => (T.VoidToNull = dart.constFn(dart.fnType(core.Null, [])))(),
+    TimerL: () => (T.TimerL = dart.constFn(dart.legacy(async.Timer)))(),
+    TimerLToNull: () => (T.TimerLToNull = dart.constFn(dart.fnType(core.Null, [T.TimerL()])))(),
+    WidgetL: () => (T.WidgetL = dart.constFn(dart.legacy(framework.Widget)))(),
+    JSArrayOfWidgetL: () => (T.JSArrayOfWidgetL = dart.constFn(_interceptors.JSArray$(T.WidgetL())))(),
+    ObjectL: () => (T.ObjectL = dart.constFn(dart.legacy(core.Object)))(),
+    AlertDialogL: () => (T.AlertDialogL = dart.constFn(dart.legacy(dialog.AlertDialog)))(),
+    BuildContextL: () => (T.BuildContextL = dart.constFn(dart.legacy(framework.BuildContext)))(),
+    BuildContextLToAlertDialogL: () => (T.BuildContextLToAlertDialogL = dart.constFn(dart.fnType(T.AlertDialogL(), [T.BuildContextL()])))(),
+    FutureOfvoid: () => (T.FutureOfvoid = dart.constFn(async.Future$(dart.void)))(),
+    FutureLOfvoid: () => (T.FutureLOfvoid = dart.constFn(dart.legacy(T.FutureOfvoid())))(),
+    VoidToFutureLOfvoid: () => (T.VoidToFutureLOfvoid = dart.constFn(dart.fnType(T.FutureLOfvoid(), [])))(),
+    PopupMenuButtonOfintL: () => (T.PopupMenuButtonOfintL = dart.constFn(popup_menu.PopupMenuButton$(T.intL())))(),
+    LinkedHashSetOfvoid: () => (T.LinkedHashSetOfvoid = dart.constFn(collection.LinkedHashSet$(dart.void)))(),
+    SetOfvoid: () => (T.SetOfvoid = dart.constFn(core.Set$(dart.void)))(),
+    SetLOfvoid: () => (T.SetLOfvoid = dart.constFn(dart.legacy(T.SetOfvoid())))(),
+    intLToSetLOfvoid: () => (T.intLToSetLOfvoid = dart.constFn(dart.fnType(T.SetLOfvoid(), [T.intL()])))(),
+    PopupMenuItemOfintL: () => (T.PopupMenuItemOfintL = dart.constFn(popup_menu.PopupMenuItem$(T.intL())))(),
+    PopupMenuItemLOfintL: () => (T.PopupMenuItemLOfintL = dart.constFn(dart.legacy(T.PopupMenuItemOfintL())))(),
+    intLToPopupMenuItemLOfintL: () => (T.intLToPopupMenuItemLOfintL = dart.constFn(dart.fnType(T.PopupMenuItemLOfintL(), [T.intL()])))(),
+    ListOfPopupMenuItemLOfintL: () => (T.ListOfPopupMenuItemLOfintL = dart.constFn(core.List$(T.PopupMenuItemLOfintL())))(),
+    ListLOfPopupMenuItemLOfintL: () => (T.ListLOfPopupMenuItemLOfintL = dart.constFn(dart.legacy(T.ListOfPopupMenuItemLOfintL())))(),
+    BuildContextLToListLOfPopupMenuItemLOfintL: () => (T.BuildContextLToListLOfPopupMenuItemLOfintL = dart.constFn(dart.fnType(T.ListLOfPopupMenuItemLOfintL(), [T.BuildContextL()])))(),
+    DragDownDetailsL: () => (T.DragDownDetailsL = dart.constFn(dart.legacy(drag_details.DragDownDetails)))(),
+    DragDownDetailsLToNull: () => (T.DragDownDetailsLToNull = dart.constFn(dart.fnType(core.Null, [T.DragDownDetailsL()])))(),
+    DragUpdateDetailsL: () => (T.DragUpdateDetailsL = dart.constFn(dart.legacy(drag_details.DragUpdateDetails)))(),
+    DragUpdateDetailsLToNull: () => (T.DragUpdateDetailsLToNull = dart.constFn(dart.fnType(core.Null, [T.DragUpdateDetailsL()])))(),
+    MouseRegionL: () => (T.MouseRegionL = dart.constFn(dart.legacy(basic.MouseRegion)))(),
+    PointerExitEventL: () => (T.PointerExitEventL = dart.constFn(dart.legacy(events.PointerExitEvent)))(),
+    PointerExitEventLToSetLOfvoid: () => (T.PointerExitEventLToSetLOfvoid = dart.constFn(dart.fnType(T.SetLOfvoid(), [T.PointerExitEventL()])))(),
+    PointerHoverEventL: () => (T.PointerHoverEventL = dart.constFn(dart.legacy(events.PointerHoverEvent)))(),
+    PointerHoverEventLToSetLOfvoid: () => (T.PointerHoverEventLToSetLOfvoid = dart.constFn(dart.fnType(T.SetLOfvoid(), [T.PointerHoverEventL()])))(),
+    intLToMouseRegionL: () => (T.intLToMouseRegionL = dart.constFn(dart.fnType(T.MouseRegionL(), [T.intL()])))(),
+    JSArrayOfintL: () => (T.JSArrayOfintL = dart.constFn(_interceptors.JSArray$(T.intL())))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "title",
+        [_Location_column]: 24,
+        [_Location_line]: 17,
+        [_Location_file]: null
+      });
+    },
+    get C1() {
+      return C[1] = dart.constList([C[2] || CT.C2], T._LocationL());
+    },
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[1] || CT.C1,
+        [_Location_name]: null,
+        [_Location_column]: 13,
+        [_Location_line]: 17,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "title",
+        [_Location_column]: 7,
+        [_Location_line]: 15,
+        [_Location_file]: null
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "theme",
+        [_Location_column]: 7,
+        [_Location_line]: 16,
+        [_Location_file]: null
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "home",
+        [_Location_column]: 7,
+        [_Location_line]: 17,
+        [_Location_file]: null
+      });
+    },
+    get C4() {
+      return C[4] = dart.constList([C[5] || CT.C5, C[6] || CT.C6, C[7] || CT.C7], T._LocationL());
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[4] || CT.C4,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 14,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 17,
+        [_Location_line]: 165,
+        [_Location_file]: null
+      });
+    },
+    get C9() {
+      return C[9] = dart.constList([C[10] || CT.C10], T._LocationL());
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[9] || CT.C9,
+        [_Location_name]: null,
+        [_Location_column]: 15,
+        [_Location_line]: 164,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 20,
+        [_Location_line]: 167,
+        [_Location_file]: null
+      });
+    },
+    get C12() {
+      return C[12] = dart.constList([C[13] || CT.C13], T._LocationL());
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[12] || CT.C12,
+        [_Location_name]: null,
+        [_Location_column]: 15,
+        [_Location_line]: 167,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: edge_insets.EdgeInsets.prototype,
+        [EdgeInsets_bottom]: 8,
+        [EdgeInsets_right]: 8,
+        [EdgeInsets_top]: 8,
+        [EdgeInsets_left]: 8
+      });
+    },
+    get C17() {
+      return C[17] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 31,
+        [_Location_line]: 181,
+        [_Location_file]: null
+      });
+    },
+    get C16() {
+      return C[16] = dart.constList([C[17] || CT.C17], T._LocationL());
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[16] || CT.C16,
+        [_Location_name]: null,
+        [_Location_column]: 26,
+        [_Location_line]: 181,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C20() {
+      return C[20] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "color",
+        [_Location_column]: 19,
+        [_Location_line]: 175,
+        [_Location_file]: null
+      });
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPressed",
+        [_Location_column]: 19,
+        [_Location_line]: 176,
+        [_Location_file]: null
+      });
+    },
+    get C22() {
+      return C[22] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 19,
+        [_Location_line]: 181,
+        [_Location_file]: null
+      });
+    },
+    get C19() {
+      return C[19] = dart.constList([C[20] || CT.C20, C[21] || CT.C21, C[22] || CT.C22], T._LocationL());
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[19] || CT.C19,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 174,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C25() {
+      return C[25] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 17,
+        [_Location_line]: 173,
+        [_Location_file]: null
+      });
+    },
+    get C26() {
+      return C[26] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 17,
+        [_Location_line]: 174,
+        [_Location_file]: null
+      });
+    },
+    get C24() {
+      return C[24] = dart.constList([C[25] || CT.C25, C[26] || CT.C26], T._LocationL());
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[24] || CT.C24,
+        [_Location_name]: null,
+        [_Location_column]: 22,
+        [_Location_line]: 172,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C29() {
+      return C[29] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "message",
+        [_Location_column]: 15,
+        [_Location_line]: 171,
+        [_Location_file]: null
+      });
+    },
+    get C30() {
+      return C[30] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 15,
+        [_Location_line]: 172,
+        [_Location_file]: null
+      });
+    },
+    get C28() {
+      return C[28] = dart.constList([C[29] || CT.C29, C[30] || CT.C30], T._LocationL());
+    },
+    get C27() {
+      return C[27] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[28] || CT.C28,
+        [_Location_name]: null,
+        [_Location_column]: 13,
+        [_Location_line]: 170,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C33() {
+      return C[33] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 31,
+        [_Location_line]: 197,
+        [_Location_file]: null
+      });
+    },
+    get C32() {
+      return C[32] = dart.constList([C[33] || CT.C33], T._LocationL());
+    },
+    get C31() {
+      return C[31] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[32] || CT.C32,
+        [_Location_name]: null,
+        [_Location_column]: 26,
+        [_Location_line]: 197,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C36() {
+      return C[36] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "color",
+        [_Location_column]: 19,
+        [_Location_line]: 191,
+        [_Location_file]: null
+      });
+    },
+    get C37() {
+      return C[37] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPressed",
+        [_Location_column]: 19,
+        [_Location_line]: 192,
+        [_Location_file]: null
+      });
+    },
+    get C38() {
+      return C[38] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 19,
+        [_Location_line]: 197,
+        [_Location_file]: null
+      });
+    },
+    get C35() {
+      return C[35] = dart.constList([C[36] || CT.C36, C[37] || CT.C37, C[38] || CT.C38], T._LocationL());
+    },
+    get C34() {
+      return C[34] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[35] || CT.C35,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 190,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C41() {
+      return C[41] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 17,
+        [_Location_line]: 189,
+        [_Location_file]: null
+      });
+    },
+    get C42() {
+      return C[42] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 17,
+        [_Location_line]: 190,
+        [_Location_file]: null
+      });
+    },
+    get C40() {
+      return C[40] = dart.constList([C[41] || CT.C41, C[42] || CT.C42], T._LocationL());
+    },
+    get C39() {
+      return C[39] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[40] || CT.C40,
+        [_Location_name]: null,
+        [_Location_column]: 22,
+        [_Location_line]: 188,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C45() {
+      return C[45] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "message",
+        [_Location_column]: 15,
+        [_Location_line]: 187,
+        [_Location_file]: null
+      });
+    },
+    get C46() {
+      return C[46] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 15,
+        [_Location_line]: 188,
+        [_Location_file]: null
+      });
+    },
+    get C44() {
+      return C[44] = dart.constList([C[45] || CT.C45, C[46] || CT.C46], T._LocationL());
+    },
+    get C43() {
+      return C[43] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[44] || CT.C44,
+        [_Location_name]: null,
+        [_Location_column]: 13,
+        [_Location_line]: 186,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C49() {
+      return C[49] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 37,
+        [_Location_line]: 212,
+        [_Location_file]: null
+      });
+    },
+    get C48() {
+      return C[48] = dart.constList([C[49] || CT.C49], T._LocationL());
+    },
+    get C47() {
+      return C[47] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[48] || CT.C48,
+        [_Location_name]: null,
+        [_Location_column]: 32,
+        [_Location_line]: 212,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C52() {
+      return C[52] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 35,
+        [_Location_line]: 217,
+        [_Location_file]: null
+      });
+    },
+    get C51() {
+      return C[51] = dart.constList([C[52] || CT.C52], T._LocationL());
+    },
+    get C50() {
+      return C[50] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[51] || CT.C51,
+        [_Location_name]: null,
+        [_Location_column]: 31,
+        [_Location_line]: 216,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C55() {
+      return C[55] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "children",
+        [_Location_column]: 29,
+        [_Location_line]: 215,
+        [_Location_file]: null
+      });
+    },
+    get C54() {
+      return C[54] = dart.constList([C[55] || CT.C55], T._LocationL());
+    },
+    get C53() {
+      return C[53] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[54] || CT.C54,
+        [_Location_name]: null,
+        [_Location_column]: 34,
+        [_Location_line]: 214,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C58() {
+      return C[58] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 27,
+        [_Location_line]: 214,
+        [_Location_file]: null
+      });
+    },
+    get C57() {
+      return C[57] = dart.constList([C[58] || CT.C58], T._LocationL());
+    },
+    get C56() {
+      return C[56] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[57] || CT.C57,
+        [_Location_name]: null,
+        [_Location_column]: 34,
+        [_Location_line]: 213,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C61() {
+      return C[61] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 41,
+        [_Location_line]: 223,
+        [_Location_file]: null
+      });
+    },
+    get C60() {
+      return C[60] = dart.constList([C[61] || CT.C61], T._LocationL());
+    },
+    get C59() {
+      return C[59] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[60] || CT.C60,
+        [_Location_name]: null,
+        [_Location_column]: 36,
+        [_Location_line]: 223,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C64() {
+      return C[64] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 29,
+        [_Location_line]: 223,
+        [_Location_file]: null
+      });
+    },
+    get C65() {
+      return C[65] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPressed",
+        [_Location_column]: 29,
+        [_Location_line]: 224,
+        [_Location_file]: null
+      });
+    },
+    get C63() {
+      return C[63] = dart.constList([C[64] || CT.C64, C[65] || CT.C65], T._LocationL());
+    },
+    get C62() {
+      return C[62] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[63] || CT.C63,
+        [_Location_name]: null,
+        [_Location_column]: 27,
+        [_Location_line]: 222,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C68() {
+      return C[68] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "title",
+        [_Location_column]: 25,
+        [_Location_line]: 212,
+        [_Location_file]: null
+      });
+    },
+    get C69() {
+      return C[69] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "content",
+        [_Location_column]: 25,
+        [_Location_line]: 213,
+        [_Location_file]: null
+      });
+    },
+    get C70() {
+      return C[70] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "actions",
+        [_Location_column]: 25,
+        [_Location_line]: 221,
+        [_Location_file]: null
+      });
+    },
+    get C67() {
+      return C[67] = dart.constList([C[68] || CT.C68, C[69] || CT.C69, C[70] || CT.C70], T._LocationL());
+    },
+    get C66() {
+      return C[66] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[67] || CT.C67,
+        [_Location_name]: null,
+        [_Location_column]: 30,
+        [_Location_line]: 211,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C73() {
+      return C[73] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "icon",
+        [_Location_column]: 25,
+        [_Location_line]: 234,
+        [_Location_file]: null
+      });
+    },
+    get C72() {
+      return C[72] = dart.constList([C[73] || CT.C73], T._LocationL());
+    },
+    get C71() {
+      return C[71] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[72] || CT.C72,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 233,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C76() {
+      return C[76] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onTap",
+        [_Location_column]: 17,
+        [_Location_line]: 206,
+        [_Location_file]: null
+      });
+    },
+    get C77() {
+      return C[77] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 17,
+        [_Location_line]: 233,
+        [_Location_file]: null
+      });
+    },
+    get C75() {
+      return C[75] = dart.constList([C[76] || CT.C76, C[77] || CT.C77], T._LocationL());
+    },
+    get C74() {
+      return C[74] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[75] || CT.C75,
+        [_Location_name]: null,
+        [_Location_column]: 22,
+        [_Location_line]: 205,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C80() {
+      return C[80] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 15,
+        [_Location_line]: 204,
+        [_Location_file]: null
+      });
+    },
+    get C81() {
+      return C[81] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 15,
+        [_Location_line]: 205,
+        [_Location_file]: null
+      });
+    },
+    get C79() {
+      return C[79] = dart.constList([C[80] || CT.C80, C[81] || CT.C81], T._LocationL());
+    },
+    get C78() {
+      return C[78] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[79] || CT.C79,
+        [_Location_name]: null,
+        [_Location_column]: 20,
+        [_Location_line]: 203,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C84() {
+      return C[84] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "message",
+        [_Location_column]: 13,
+        [_Location_line]: 202,
+        [_Location_file]: null
+      });
+    },
+    get C85() {
+      return C[85] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 13,
+        [_Location_line]: 203,
+        [_Location_file]: null
+      });
+    },
+    get C83() {
+      return C[83] = dart.constList([C[84] || CT.C84, C[85] || CT.C85], T._LocationL());
+    },
+    get C82() {
+      return C[82] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[83] || CT.C83,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 201,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C88() {
+      return C[88] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 54,
+        [_Location_line]: 250,
+        [_Location_file]: null
+      });
+    },
+    get C87() {
+      return C[87] = dart.constList([C[88] || CT.C88], T._LocationL());
+    },
+    get C86() {
+      return C[86] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[87] || CT.C87,
+        [_Location_name]: null,
+        [_Location_column]: 28,
+        [_Location_line]: 250,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C91() {
+      return C[91] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "value",
+        [_Location_column]: 21,
+        [_Location_line]: 249,
+        [_Location_file]: null
+      });
+    },
+    get C92() {
+      return C[92] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 21,
+        [_Location_line]: 250,
+        [_Location_file]: null
+      });
+    },
+    get C90() {
+      return C[90] = dart.constList([C[91] || CT.C91, C[92] || CT.C92], T._LocationL());
+    },
+    get C89() {
+      return C[89] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[90] || CT.C90,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 248,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C95() {
+      return C[95] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onSelected",
+        [_Location_column]: 13,
+        [_Location_line]: 240,
+        [_Location_file]: null
+      });
+    },
+    get C96() {
+      return C[96] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemBuilder",
+        [_Location_column]: 13,
+        [_Location_line]: 246,
+        [_Location_file]: null
+      });
+    },
+    get C94() {
+      return C[94] = dart.constList([C[95] || CT.C95, C[96] || CT.C96], T._LocationL());
+    },
+    get C93() {
+      return C[93] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[94] || CT.C94,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 239,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C99() {
+      return C[99] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "title",
+        [_Location_column]: 9,
+        [_Location_line]: 163,
+        [_Location_file]: null
+      });
+    },
+    get C100() {
+      return C[100] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "actions",
+        [_Location_column]: 9,
+        [_Location_line]: 168,
+        [_Location_file]: null
+      });
+    },
+    get C98() {
+      return C[98] = dart.constList([C[99] || CT.C99, C[100] || CT.C100], T._LocationL());
+    },
+    get C97() {
+      return C[97] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[98] || CT.C98,
+        [_Location_name]: null,
+        [_Location_column]: 15,
+        [_Location_line]: 162,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C103() {
+      return C[103] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 27,
+        [_Location_line]: 347,
+        [_Location_file]: null
+      });
+    },
+    get C104() {
+      return C[104] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "style",
+        [_Location_column]: 25,
+        [_Location_line]: 348,
+        [_Location_file]: null
+      });
+    },
+    get C102() {
+      return C[102] = dart.constList([C[103] || CT.C103, C[104] || CT.C104], T._LocationL());
+    },
+    get C101() {
+      return C[101] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[102] || CT.C102,
+        [_Location_name]: null,
+        [_Location_column]: 30,
+        [_Location_line]: 346,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C107() {
+      return C[107] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 23,
+        [_Location_line]: 346,
+        [_Location_file]: null
+      });
+    },
+    get C108() {
+      return C[108] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fit",
+        [_Location_column]: 23,
+        [_Location_line]: 350,
+        [_Location_file]: null
+      });
+    },
+    get C106() {
+      return C[106] = dart.constList([C[107] || CT.C107, C[108] || CT.C108], T._LocationL());
+    },
+    get C105() {
+      return C[105] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[106] || CT.C106,
+        [_Location_name]: null,
+        [_Location_column]: 32,
+        [_Location_line]: 345,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C111() {
+      return C[111] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 25,
+        [_Location_line]: 345,
+        [_Location_file]: null
+      });
+    },
+    get C110() {
+      return C[110] = dart.constList([C[111] || CT.C111], T._LocationL());
+    },
+    get C109() {
+      return C[109] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[110] || CT.C110,
+        [_Location_name]: null,
+        [_Location_column]: 28,
+        [_Location_line]: 344,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C114() {
+      return C[114] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "margin",
+        [_Location_column]: 21,
+        [_Location_line]: 333,
+        [_Location_file]: null
+      });
+    },
+    get C115() {
+      return C[115] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "decoration",
+        [_Location_column]: 21,
+        [_Location_line]: 334,
+        [_Location_file]: null
+      });
+    },
+    get C116() {
+      return C[116] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 21,
+        [_Location_line]: 344,
+        [_Location_file]: null
+      });
+    },
+    get C113() {
+      return C[113] = dart.constList([C[114] || CT.C114, C[115] || CT.C115, C[116] || CT.C116], T._LocationL());
+    },
+    get C112() {
+      return C[112] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[113] || CT.C113,
+        [_Location_name]: null,
+        [_Location_column]: 26,
+        [_Location_line]: 332,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C119() {
+      return C[119] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "cursor",
+        [_Location_column]: 19,
+        [_Location_line]: 320,
+        [_Location_file]: null
+      });
+    },
+    get C120() {
+      return C[120] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onExit",
+        [_Location_column]: 19,
+        [_Location_line]: 321,
+        [_Location_file]: null
+      });
+    },
+    get C121() {
+      return C[121] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onHover",
+        [_Location_column]: 19,
+        [_Location_line]: 326,
+        [_Location_file]: null
+      });
+    },
+    get C122() {
+      return C[122] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "opaque",
+        [_Location_column]: 19,
+        [_Location_line]: 331,
+        [_Location_file]: null
+      });
+    },
+    get C123() {
+      return C[123] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 19,
+        [_Location_line]: 332,
+        [_Location_file]: null
+      });
+    },
+    get C118() {
+      return C[118] = dart.constList([C[119] || CT.C119, C[120] || CT.C120, C[121] || CT.C121, C[122] || CT.C122, C[123] || CT.C123], T._LocationL());
+    },
+    get C117() {
+      return C[117] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[118] || CT.C118,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 319,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C126() {
+      return C[126] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "physics",
+        [_Location_column]: 15,
+        [_Location_line]: 311,
+        [_Location_file]: null
+      });
+    },
+    get C127() {
+      return C[127] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "key",
+        [_Location_column]: 15,
+        [_Location_line]: 312,
+        [_Location_file]: null
+      });
+    },
+    get C128() {
+      return C[128] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "childAspectRatio",
+        [_Location_column]: 15,
+        [_Location_line]: 313,
+        [_Location_file]: null
+      });
+    },
+    get C129() {
+      return C[129] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "shrinkWrap",
+        [_Location_column]: 15,
+        [_Location_line]: 314,
+        [_Location_file]: null
+      });
+    },
+    get C130() {
+      return C[130] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "primary",
+        [_Location_column]: 15,
+        [_Location_line]: 315,
+        [_Location_file]: null
+      });
+    },
+    get C131() {
+      return C[131] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "crossAxisCount",
+        [_Location_column]: 15,
+        [_Location_line]: 316,
+        [_Location_file]: null
+      });
+    },
+    get C132() {
+      return C[132] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "children",
+        [_Location_column]: 15,
+        [_Location_line]: 317,
+        [_Location_file]: null
+      });
+    },
+    get C125() {
+      return C[125] = dart.constList([C[126] || CT.C126, C[127] || CT.C127, C[128] || CT.C128, C[129] || CT.C129, C[130] || CT.C130, C[131] || CT.C131, C[132] || CT.C132], T._LocationL());
+    },
+    get C124() {
+      return C[124] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[125] || CT.C125,
+        [_Location_name]: null,
+        [_Location_column]: 29,
+        [_Location_line]: 310,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C135() {
+      return C[135] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPanDown",
+        [_Location_column]: 13,
+        [_Location_line]: 260,
+        [_Location_file]: null
+      });
+    },
+    get C136() {
+      return C[136] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPanUpdate",
+        [_Location_column]: 13,
+        [_Location_line]: 276,
+        [_Location_file]: null
+      });
+    },
+    get C137() {
+      return C[137] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 13,
+        [_Location_line]: 310,
+        [_Location_file]: null
+      });
+    },
+    get C134() {
+      return C[134] = dart.constList([C[135] || CT.C135, C[136] || CT.C136, C[137] || CT.C137], T._LocationL());
+    },
+    get C133() {
+      return C[133] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[134] || CT.C134,
+        [_Location_name]: null,
+        [_Location_column]: 18,
+        [_Location_line]: 259,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C140() {
+      return C[140] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "constraints",
+        [_Location_column]: 11,
+        [_Location_line]: 258,
+        [_Location_file]: null
+      });
+    },
+    get C141() {
+      return C[141] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 11,
+        [_Location_line]: 259,
+        [_Location_file]: null
+      });
+    },
+    get C139() {
+      return C[139] = dart.constList([C[140] || CT.C140, C[141] || CT.C141], T._LocationL());
+    },
+    get C138() {
+      return C[138] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[139] || CT.C139,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 257,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C144() {
+      return C[144] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 9,
+        [_Location_line]: 257,
+        [_Location_file]: null
+      });
+    },
+    get C143() {
+      return C[143] = dart.constList([C[144] || CT.C144], T._LocationL());
+    },
+    get C142() {
+      return C[142] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[143] || CT.C143,
+        [_Location_name]: null,
+        [_Location_column]: 13,
+        [_Location_line]: 256,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C147() {
+      return C[147] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "appBar",
+        [_Location_column]: 7,
+        [_Location_line]: 162,
+        [_Location_file]: null
+      });
+    },
+    get C148() {
+      return C[148] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "body",
+        [_Location_column]: 7,
+        [_Location_line]: 256,
+        [_Location_file]: null
+      });
+    },
+    get C146() {
+      return C[146] = dart.constList([C[147] || CT.C147, C[148] || CT.C148], T._LocationL());
+    },
+    get C145() {
+      return C[145] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[146] || CT.C146,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 161,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    },
+    get C150() {
+      return C[150] = dart.constList([], T._LocationL());
+    },
+    get C149() {
+      return C[149] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[150] || CT.C150,
+        [_Location_name]: null,
+        [_Location_column]: 10,
+        [_Location_line]: 8,
+        [_Location_file]: "file:///D:/Forsythe/Desktop/torus_puzzle/lib/main.dart"
+      });
+    }
+  }, false);
+  var C = Array(151).fill(void 0);
+  var I = ["package:torus_puzzle/main.dart"];
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  main.MyApp = class MyApp extends framework.StatelessWidget {
+    build(context) {
+      return new app.MaterialApp.new({title: "Torus Puzzle", theme: theme_data.ThemeData.dark(), home: new main.MyHomePage.new({title: "Torus Puzzle", $creationLocationd_0dea112b090073317d4: C[0] || CT.C0}), $creationLocationd_0dea112b090073317d4: C[3] || CT.C3});
+    }
+  };
+  (main.MyApp.new = function(opts) {
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    main.MyApp.__proto__.new.call(this, {$creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = main.MyApp.prototype;
+  dart.addTypeTests(main.MyApp);
+  dart.addTypeCaches(main.MyApp);
+  dart.setMethodSignature(main.MyApp, () => ({
+    __proto__: dart.getMethods(main.MyApp.__proto__),
+    build: dart.fnType(dart.legacy(framework.Widget), [dart.legacy(framework.BuildContext)])
+  }));
+  dart.setLibraryUri(main.MyApp, I[0]);
+  var title$ = dart.privateName(main, "MyHomePage.title");
+  main.MyHomePage = class MyHomePage extends framework.StatefulWidget {
+    get title() {
+      return this[title$];
+    }
+    set title(value) {
+      super.title = value;
+    }
+    createState() {
+      return new main._MyHomePageState.new();
+    }
+  };
+  (main.MyHomePage.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let title = opts && 'title' in opts ? opts.title : null;
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[title$] = title;
+    main.MyHomePage.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = main.MyHomePage.prototype;
+  dart.addTypeTests(main.MyHomePage);
+  dart.addTypeCaches(main.MyHomePage);
+  dart.setMethodSignature(main.MyHomePage, () => ({
+    __proto__: dart.getMethods(main.MyHomePage.__proto__),
+    createState: dart.fnType(dart.legacy(main._MyHomePageState), [])
+  }));
+  dart.setLibraryUri(main.MyHomePage, I[0]);
+  dart.setFieldSignature(main.MyHomePage, () => ({
+    __proto__: dart.getFields(main.MyHomePage.__proto__),
+    title: dart.finalFieldType(dart.legacy(core.String))
+  }));
+  var EdgeInsets_bottom = dart.privateName(edge_insets, "EdgeInsets.bottom");
+  var EdgeInsets_right = dart.privateName(edge_insets, "EdgeInsets.right");
+  var EdgeInsets_top = dart.privateName(edge_insets, "EdgeInsets.top");
+  var EdgeInsets_left = dart.privateName(edge_insets, "EdgeInsets.left");
+  main._MyHomePageState = class _MyHomePageState extends framework.State$(dart.legacy(main.MyHomePage)) {
+    initState() {
+      super.initState();
+      this.stopwatch = new core.Stopwatch.new();
+      this.timer = async.Timer.periodic(new core.Duration.new({milliseconds: 100}), dart.fn(timer => {
+        this.setState(dart.fn(() => {
+        }, T.VoidToNull()));
+      }, T.TimerLToNull()));
+    }
+    dispose() {
+      this.timer.cancel();
+      super.dispose();
+    }
+    isSolved() {
+      for (let k = 0; k < dart.notNull(this.tileValues[$length]) - 1; k = k + 1) {
+        if (dart.notNull(this.tileValues[$_get](k)) > dart.notNull(this.tileValues[$_get](k + 1))) return false;
+      }
+      return true;
+    }
+    reset() {
+      let t0, t0$;
+      this.tileValues = T.ListOfintL().generate(dart.notNull(main._MyHomePageState.puzzleDim) * dart.notNull(main._MyHomePageState.puzzleDim), dart.fn(i => dart.notNull(i) + 1, T.intLTointL()));
+      this.solved = true;
+      t0 = this.stopwatch;
+      t0 == null ? null : t0.stop();
+      t0$ = this.stopwatch;
+      t0$ == null ? null : t0$.reset();
+    }
+    scramble() {
+      this.tileValues = T.ListOfintL().generate(dart.notNull(main._MyHomePageState.puzzleDim) * dart.notNull(main._MyHomePageState.puzzleDim), dart.fn(i => dart.notNull(i) + 1, T.intLTointL()));
+      let rng = math.Random.new();
+      do {
+        for (let i = 0; i < 10; i = i + 1) {
+          this.columnOffset(rng.nextInt(main._MyHomePageState.puzzleDim), rng.nextInt(main._MyHomePageState.puzzleDim));
+          this.rowOffset(rng.nextInt(main._MyHomePageState.puzzleDim), rng.nextInt(main._MyHomePageState.puzzleDim));
+        }
+      } while (dart.test(this.isSolved()));
+      this.solved = false;
+      this.stopwatch.stop();
+      this.stopwatch.reset();
+    }
+    columnOffset(column, offset) {
+      let t0;
+      offset = offset[$modulo](main._MyHomePageState.puzzleDim);
+      if (dart.notNull(offset) < 0) {
+        offset = dart.notNull(offset) + dart.notNull(main._MyHomePageState.puzzleDim);
+      }
+      let oldIndices = T.ListOfintL().generate(main._MyHomePageState.puzzleDim, dart.fn(i => dart.notNull(i) * dart.notNull(main._MyHomePageState.puzzleDim) + dart.notNull(column), T.intLTointL()));
+      let rotatedIndices = (t0 = oldIndices[$sublist](offset), (() => {
+        t0[$addAll](oldIndices[$sublist](0, offset));
+        return t0;
+      })());
+      let newTileValues = T.ListOfintL().from(this.tileValues);
+      for (let k = 0; k < dart.notNull(main._MyHomePageState.puzzleDim); k = k + 1) {
+        newTileValues[$_set](rotatedIndices[$_get](k), this.tileValues[$_get](oldIndices[$_get](k)));
+      }
+      this.tileValues = newTileValues;
+    }
+    rowOffset(row, offset) {
+      let t0;
+      offset = offset[$modulo](main._MyHomePageState.puzzleDim);
+      if (dart.notNull(offset) < 0) {
+        offset = dart.notNull(offset) + dart.notNull(main._MyHomePageState.puzzleDim);
+      }
+      let oldIndices = T.ListOfintL().generate(main._MyHomePageState.puzzleDim, dart.fn(i => dart.notNull(i) + dart.notNull(main._MyHomePageState.puzzleDim) * dart.notNull(row), T.intLTointL()));
+      let rotatedIndices = (t0 = oldIndices[$sublist](offset), (() => {
+        t0[$addAll](oldIndices[$sublist](0, offset));
+        return t0;
+      })());
+      let newTileValues = T.ListOfintL().from(this.tileValues);
+      for (let k = 0; k < dart.notNull(main._MyHomePageState.puzzleDim); k = k + 1) {
+        newTileValues[$_set](rotatedIndices[$_get](k), this.tileValues[$_get](oldIndices[$_get](k)));
+      }
+      this.tileValues = newTileValues;
+    }
+    build(context) {
+      return new scaffold.Scaffold.new({appBar: new app_bar.AppBar.new({title: dart.test(this.stopwatch.isRunning) || dart.notNull(this.stopwatch.elapsedMilliseconds) > 0 ? new text.Text.new(main.formatTime(this.stopwatch.elapsedMilliseconds), {$creationLocationd_0dea112b090073317d4: C[8] || CT.C8}) : new text.Text.new("Torus Puzzle", {$creationLocationd_0dea112b090073317d4: C[11] || CT.C11}), actions: (() => {
+            let t0 = T.JSArrayOfWidgetL().of([]);
+            if (!dart.test(this.isSolved())) t0[$add](new tooltip.Tooltip.new({message: "I give up!", child: new basic.Padding.new({padding: C[14] || CT.C14, child: new material_button.MaterialButton.new({color: colors.Colors.red, onPressed: dart.fn(() => {
+                    this.setState(dart.fn(() => {
+                      this.reset();
+                    }, T.VoidToNull()));
+                  }, T.VoidToNull()), child: new text.Text.new("I give up!", {$creationLocationd_0dea112b090073317d4: C[15] || CT.C15}), $creationLocationd_0dea112b090073317d4: C[18] || CT.C18}), $creationLocationd_0dea112b090073317d4: C[23] || CT.C23}), $creationLocationd_0dea112b090073317d4: C[27] || CT.C27}));
+            if (dart.test(this.isSolved())) t0[$add](new tooltip.Tooltip.new({message: "Shuffle", child: new basic.Padding.new({padding: C[14] || CT.C14, child: new material_button.MaterialButton.new({color: colors.Colors.green, onPressed: dart.fn(() => {
+                    this.setState(dart.fn(() => {
+                      this.scramble();
+                    }, T.VoidToNull()));
+                  }, T.VoidToNull()), child: new text.Text.new("Start", {$creationLocationd_0dea112b090073317d4: C[31] || CT.C31}), $creationLocationd_0dea112b090073317d4: C[34] || CT.C34}), $creationLocationd_0dea112b090073317d4: C[39] || CT.C39}), $creationLocationd_0dea112b090073317d4: C[43] || CT.C43}));
+            t0[$add](new tooltip.Tooltip.new({message: "Instructions", child: new basic.Padding.new({padding: C[14] || CT.C14, child: new gesture_detector.GestureDetector.new({onTap: dart.fn(() => dialog.showDialog(dart.void, {context: context, barrierDismissible: false, builder: dart.fn(context => new dialog.AlertDialog.new({title: new text.Text.new("Instructions", {$creationLocationd_0dea112b090073317d4: C[47] || CT.C47}), content: new single_child_scroll_view.SingleChildScrollView.new({child: new basic.ListBody.new({children: T.JSArrayOfWidgetL().of([new text.Text.new("The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.", {$creationLocationd_0dea112b090073317d4: C[50] || CT.C50})]), $creationLocationd_0dea112b090073317d4: C[53] || CT.C53}), $creationLocationd_0dea112b090073317d4: C[56] || CT.C56}), actions: T.JSArrayOfWidgetL().of([new text_button.TextButton.new({child: new text.Text.new("Got it!", {$creationLocationd_0dea112b090073317d4: C[59] || CT.C59}), onPressed: dart.fn(() => {
+                            navigator.Navigator.of(context).pop(T.ObjectL());
+                          }, T.VoidToNull()), $creationLocationd_0dea112b090073317d4: C[62] || CT.C62})]), $creationLocationd_0dea112b090073317d4: C[66] || CT.C66}), T.BuildContextLToAlertDialogL())}), T.VoidToFutureLOfvoid()), child: new icon.Icon.new(icons.Icons.info, {$creationLocationd_0dea112b090073317d4: C[71] || CT.C71}), $creationLocationd_0dea112b090073317d4: C[74] || CT.C74}), $creationLocationd_0dea112b090073317d4: C[78] || CT.C78}), $creationLocationd_0dea112b090073317d4: C[82] || CT.C82}));
+            t0[$add](new (T.PopupMenuButtonOfintL()).new({onSelected: dart.fn(value => T.LinkedHashSetOfvoid().from([this.setState(dart.fn(() => {
+                  main._MyHomePageState.puzzleDim = value;
+                  this.scramble();
+                }, T.VoidToNull()))]), T.intLToSetLOfvoid()), itemBuilder: dart.fn(context => main._MyHomePageState.puzzleDimOptions[$map](T.PopupMenuItemLOfintL(), dart.fn(dim => new (T.PopupMenuItemOfintL()).new({value: dim, child: new text.Text.new(dart.toString(dim) + "x" + dart.toString(dim), {$creationLocationd_0dea112b090073317d4: C[86] || CT.C86}), $creationLocationd_0dea112b090073317d4: C[89] || CT.C89}), T.intLToPopupMenuItemLOfintL()))[$toList](), T.BuildContextLToListLOfPopupMenuItemLOfintL()), $creationLocationd_0dea112b090073317d4: C[93] || CT.C93}));
+            return t0;
+          })(), $creationLocationd_0dea112b090073317d4: C[97] || CT.C97}), body: new basic.Center.new({child: new container.Container.new({constraints: new box.BoxConstraints.new({maxWidth: 500.0, maxHeight: 500.0}), child: new gesture_detector.GestureDetector.new({onPanDown: dart.test(this.isSolved()) ? null : dart.fn(details => {
+                this.stopwatch.start();
+                this.gridYStart = main['GlobalKeyExtension|get#globalPaintBounds'](this.containerKey).top;
+                this.gridXStart = main['GlobalKeyExtension|get#globalPaintBounds'](this.containerKey).left;
+                this.tileSize = (dart.notNull(main['GlobalKeyExtension|get#globalPaintBounds'](this.containerKey).right) - dart.notNull(main['GlobalKeyExtension|get#globalPaintBounds'](this.containerKey).left)) / dart.notNull(main._MyHomePageState.puzzleDim);
+                this.prevRow = ((dart.notNull(details.globalPosition.dy) - dart.notNull(this.gridYStart)) / dart.notNull(this.tileSize))[$truncate]();
+                this.prevCol = ((dart.notNull(details.globalPosition.dx) - dart.notNull(this.gridXStart)) / dart.notNull(this.tileSize))[$truncate]();
+              }, T.DragDownDetailsLToNull()), onPanUpdate: dart.test(this.isSolved()) ? null : dart.fn(details => {
+                let newRow = ((dart.notNull(details.globalPosition.dy) - dart.notNull(this.gridYStart)) / dart.notNull(this.tileSize))[$truncate]();
+                let newCol = ((dart.notNull(details.globalPosition.dx) - dart.notNull(this.gridXStart)) / dart.notNull(this.tileSize))[$truncate]();
+                newRow = main.clamp(newRow, 0, main._MyHomePageState.puzzleDim);
+                newCol = main.clamp(newCol, 0, main._MyHomePageState.puzzleDim);
+                if (newRow != this.prevRow && newCol != this.prevCol) {
+                  return;
+                }
+                if (newRow != this.prevRow) {
+                  this.setState(dart.fn(() => {
+                    this.columnOffset(newCol, dart.notNull(newRow) - dart.notNull(this.prevRow));
+                  }, T.VoidToNull()));
+                  this.prevRow = newRow;
+                }
+                if (newCol != this.prevCol) {
+                  this.setState(dart.fn(() => {
+                    this.rowOffset(newRow, dart.notNull(newCol) - dart.notNull(this.prevCol));
+                  }, T.VoidToNull()));
+                  this.prevCol = newCol;
+                }
+                this.setState(dart.fn(() => {
+                  let prevSolved = this.solved;
+                  this.solved = this.isSolved();
+                  if (!dart.test(prevSolved) && dart.test(this.solved)) {
+                    this.stopwatch.stop();
+                  }
+                }, T.VoidToNull()));
+              }, T.DragUpdateDetailsLToNull()), child: new scroll_view.GridView.count({physics: new scroll_physics.ClampingScrollPhysics.new(), key: this.containerKey, childAspectRatio: 1.0, shrinkWrap: true, primary: true, crossAxisCount: main._MyHomePageState.puzzleDim, children: this.tileValues[$map](T.MouseRegionL(), dart.fn(e => {
+                  let intensity = 100 - (90 / (dart.notNull(main._MyHomePageState.puzzleDim) * dart.notNull(main._MyHomePageState.puzzleDim)))[$truncate]() * dart.notNull(e);
+                  return new basic.MouseRegion.new({cursor: mouse_cursor.SystemMouseCursors.move, onExit: dart.fn(event => T.LinkedHashSetOfvoid().from([this.setState(dart.fn(() => {
+                        this.hoveringOver = -1;
+                      }, T.VoidToNull()))]), T.PointerExitEventLToSetLOfvoid()), onHover: dart.fn(event => T.LinkedHashSetOfvoid().from([this.setState(dart.fn(() => {
+                        this.hoveringOver = e;
+                      }, T.VoidToNull()))]), T.PointerHoverEventLToSetLOfvoid()), opaque: false, child: new container.Container.new({margin: new edge_insets.EdgeInsets.all(2.0), decoration: new box_decoration.BoxDecoration.new({border: box_border.Border.all({color: colors.Colors.white70, width: this.hoveringOver == e ? 4.0 : 0.5}), color: new ui.Color.fromRGBO(dart.test(this.solved) ? (intensity / 1.5)[$truncate]() : intensity, intensity, dart.test(this.solved) ? (intensity / 1.5)[$truncate]() : intensity, 1.0), borderRadius: new border_radius.BorderRadius.all(new ui.Radius.circular(10.0))}), child: new basic.Center.new({child: new basic.FittedBox.new({child: new text.Text.new(dart.toString(e), {style: new text_style.TextStyle.new({fontSize: 35.0}), $creationLocationd_0dea112b090073317d4: C[101] || CT.C101}), fit: box_fit.BoxFit.fitWidth, $creationLocationd_0dea112b090073317d4: C[105] || CT.C105}), $creationLocationd_0dea112b090073317d4: C[109] || CT.C109}), $creationLocationd_0dea112b090073317d4: C[112] || CT.C112}), $creationLocationd_0dea112b090073317d4: C[117] || CT.C117});
+                }, T.intLToMouseRegionL()))[$toList](), $creationLocationd_0dea112b090073317d4: C[124] || CT.C124}), $creationLocationd_0dea112b090073317d4: C[133] || CT.C133}), $creationLocationd_0dea112b090073317d4: C[138] || CT.C138}), $creationLocationd_0dea112b090073317d4: C[142] || CT.C142}), $creationLocationd_0dea112b090073317d4: C[145] || CT.C145});
+    }
+  };
+  (main._MyHomePageState.new = function() {
+    this.solved = true;
+    this.stopwatch = null;
+    this.timer = null;
+    this.prevRow = 0;
+    this.prevCol = 0;
+    this.tileSize = 0.0;
+    this.gridYStart = 0.0;
+    this.gridXStart = 0.0;
+    this.hoveringOver = null;
+    this.containerKey = T.GlobalKeyOfStateLOfStatefulWidgetL().new();
+    this.tileValues = T.ListOfintL().generate(dart.notNull(main._MyHomePageState.puzzleDim) * dart.notNull(main._MyHomePageState.puzzleDim), dart.fn(i => dart.notNull(i) + 1, T.intLTointL()));
+    main._MyHomePageState.__proto__.new.call(this);
+    ;
+  }).prototype = main._MyHomePageState.prototype;
+  dart.addTypeTests(main._MyHomePageState);
+  dart.addTypeCaches(main._MyHomePageState);
+  dart.setMethodSignature(main._MyHomePageState, () => ({
+    __proto__: dart.getMethods(main._MyHomePageState.__proto__),
+    isSolved: dart.fnType(dart.legacy(core.bool), []),
+    reset: dart.fnType(dart.void, []),
+    scramble: dart.fnType(dart.void, []),
+    columnOffset: dart.fnType(dart.void, [dart.legacy(core.int), dart.legacy(core.int)]),
+    rowOffset: dart.fnType(dart.void, [dart.legacy(core.int), dart.legacy(core.int)]),
+    build: dart.fnType(dart.legacy(framework.Widget), [dart.legacy(framework.BuildContext)])
+  }));
+  dart.setLibraryUri(main._MyHomePageState, I[0]);
+  dart.setFieldSignature(main._MyHomePageState, () => ({
+    __proto__: dart.getFields(main._MyHomePageState.__proto__),
+    solved: dart.fieldType(dart.legacy(core.bool)),
+    stopwatch: dart.fieldType(dart.legacy(core.Stopwatch)),
+    timer: dart.fieldType(dart.legacy(async.Timer)),
+    prevRow: dart.fieldType(dart.legacy(core.int)),
+    prevCol: dart.fieldType(dart.legacy(core.int)),
+    tileSize: dart.fieldType(dart.legacy(core.double)),
+    gridYStart: dart.fieldType(dart.legacy(core.double)),
+    gridXStart: dart.fieldType(dart.legacy(core.double)),
+    hoveringOver: dart.fieldType(dart.legacy(core.int)),
+    containerKey: dart.finalFieldType(dart.legacy(framework.GlobalKey$(dart.legacy(framework.State$(dart.legacy(framework.StatefulWidget)))))),
+    tileValues: dart.fieldType(dart.legacy(core.List$(dart.legacy(core.int))))
+  }));
+  dart.defineLazy(main._MyHomePageState, {
+    /*main._MyHomePageState.puzzleDimOptions*/get puzzleDimOptions() {
+      return T.JSArrayOfintL().of([2, 3, 4, 5, 6]);
+    },
+    set puzzleDimOptions(_) {},
+    /*main._MyHomePageState.puzzleDim*/get puzzleDim() {
+      return main._MyHomePageState.puzzleDimOptions[$_get](2);
+    },
+    set puzzleDim(_) {}
+  }, true);
+  main.main = function main$() {
+    binding.runApp(new main.MyApp.new({$creationLocationd_0dea112b090073317d4: C[149] || CT.C149}));
+  };
+  main['GlobalKeyExtension|get#globalPaintBounds'] = function GlobalKeyExtension$124get$35globalPaintBounds($this) {
+    let t2, t2$, t2$0;
+    let renderObject = (t2 = $this.currentContext, t2 == null ? null : t2.findRenderObject());
+    let translation = (t2$0 = (t2$ = renderObject, t2$ == null ? null : t2$.getTransformTo(null)), t2$0 == null ? null : t2$0.getTranslation());
+    if (translation != null && renderObject.paintBounds != null) {
+      return renderObject.paintBounds.shift(new ui.Offset.new(translation.x, translation.y));
+    } else {
+      return null;
+    }
+  };
+  main.formatTime = function formatTime(ms) {
+    let msecs = ms[$modulo](1000)[$toString]()[$padLeft](3, "0");
+    let secs = (dart.notNull(ms) / 1000)[$truncate]();
+    let minutes = (secs[$modulo](3600) / 60)[$truncate]()[$toString]()[$padLeft](2, "0");
+    let seconds = secs[$modulo](60)[$toString]()[$padLeft](2, "0");
+    return minutes + ":" + seconds + "." + msecs;
+  };
+  main.clamp = function clamp(val, minInclusive, maxExclusive) {
+    if (dart.notNull(val) < dart.notNull(minInclusive)) return minInclusive;
+    if (dart.notNull(val) >= dart.notNull(maxExclusive)) return dart.notNull(maxExclusive) - 1;
+    return val;
+  };
+  dart.trackLibraries("packages/torus_puzzle/main.dart", {
+    "package:torus_puzzle/main.dart": main
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["main.dart"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;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","file":"../../../../packages/torus_puzzle/main.dart.lib.js"}');
+  // Exports:
+  return {
+    main: main
+  };
+}));
+
+//# sourceMappingURL=main.dart.lib.js.map
