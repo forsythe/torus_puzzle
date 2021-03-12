@@ -91,7 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
     resetOffsets();
     stopwatch = Stopwatch();
     timer = new Timer.periodic(new Duration(milliseconds: 100), (timer) {
-      setState(() {});
+      if (stopwatch.isRunning) {
+        setState(() {});
+      }
     });
   }
 
@@ -163,6 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void rowOffset(int row, int offset) {
     doOffset(row, offset, (i) => i + puzzleDim * row);
   }
+
+  int x = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -280,9 +284,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             })
                           },
                           onHover: (event) => {
-                            setState(() {
-                              hoveringOver = e;
-                            })
+                            if (hoveringOver != e)
+                              {
+                                setState(() {
+                                  hoveringOver = e;
+                                })
+                              }
                           },
                           opaque: false,
                           child: Cell(
