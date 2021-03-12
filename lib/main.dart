@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'cell.dart';
 
 void main() {
   runApp(MyApp());
@@ -58,6 +61,7 @@ num clamp(num val, num minInclusive, num maxExclusive) {
 class _MyHomePageState extends State<MyHomePage> {
   static List<int> puzzleDimOptions = [2, 3, 4, 5, 6];
   static int puzzleDim = puzzleDimOptions[2];
+  Map<int, int> rotationBuffer = new HashMap();
   bool solved = true;
   Stopwatch stopwatch;
   Timer timer;
@@ -89,7 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
     timer = new Timer.periodic(new Duration(milliseconds: 100), (timer) {
       setState(() {});
     });
-//    scramble();
   }
 
   void resetOffsets() {
@@ -127,44 +130,38 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } while (isSolved());
 
-    solved = false;
+    setState(() {
+      solved = false;
+    });
     stopwatch.stop();
     stopwatch.reset();
   }
 
-  void columnOffset(int column, int offset) {
+  void doOffset(int rowOrCol, int offset, Function(int) indexGenerator) {
     while (offset < 0) {
       offset += puzzleDim;
     }
     offset %= puzzleDim;
-
-    List<int> oldIndices =
-        new List<int>.generate(puzzleDim, (i) => i * puzzleDim + column);
-    List<int> rotatedIndices = oldIndices.sublist(offset)
-      ..addAll(oldIndices.sublist(0, offset));
+    List<int> oldIndices = new List<int>.generate(puzzleDim, indexGenerator);
+    rotationBuffer.clear();
+    for (int i in oldIndices) {
+      rotationBuffer.putIfAbsent(i, () => tileValues[i]);
+    }
 
     List<int> newTileValues = List.from(tileValues);
     for (int k = 0; k < puzzleDim; k++) {
-      newTileValues[rotatedIndices[k]] = tileValues[oldIndices[k]];
+      newTileValues[oldIndices[(k + offset) % puzzleDim]] =
+          rotationBuffer[oldIndices[k]];
     }
     tileValues = newTileValues;
   }
 
-  void rowOffset(int row, int offset) {
-    while (offset < 0) {
-      offset += puzzleDim;
-    }
-    offset %= puzzleDim;
+  void columnOffset(int column, int offset) {
+    doOffset(column, offset, (i) => i * puzzleDim + column);
+  }
 
-    List<int> oldIndices =
-        new List<int>.generate(puzzleDim, (i) => i + puzzleDim * row);
-    List<int> rotatedIndices = oldIndices.sublist(offset)
-      ..addAll(oldIndices.sublist(0, offset));
-    List<int> newTileValues = List.from(tileValues);
-    for (int k = 0; k < puzzleDim; k++) {
-      newTileValues[rotatedIndices[k]] = tileValues[oldIndices[k]];
-    }
-    tileValues = newTileValues;
+  void rowOffset(int row, int offset) {
+    doOffset(row, offset, (i) => i + puzzleDim * row);
   }
 
   @override
@@ -176,132 +173,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 formatTime(stopwatch.elapsedMilliseconds),
               )
             : Text("Torus Puzzle"),
-        actions: <Widget>[
-          if (!isSolved())
-            Tooltip(
-              message: "I give up!",
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MaterialButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    setState(() {
-                      reset();
-                    });
-                  },
-                  child: Text("I give up!"),
-                ),
-              ),
-            ),
-          if (isSolved())
-            Tooltip(
-              message: "Shuffle",
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MaterialButton(
-                  color: Colors.green,
-                  onPressed: () {
-                    setState(() {
-                      scramble();
-                    });
-                  },
-                  child: Text("Start"),
-                ),
-              ),
-            ),
-          Tooltip(
-            message: "Instructions",
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  return showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Instructions'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text(
-                                  'The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
-                            ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Got it!'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Icon(
-                  Icons.info,
-                ),
-              ),
-            ),
-          ),
-          PopupMenuButton<int>(
-            onSelected: (value) => {
-              setState(() {
-                puzzleDim = value;
-                reset();
-                resetOffsets();
-              })
-            },
-            itemBuilder: (BuildContext context) {
-              return puzzleDimOptions.map((dim) {
-                return PopupMenuItem<int>(
-                    value: dim,
-                    child: Text(dim.toString() + "x" + dim.toString()));
-              }).toList();
-            },
-          ),
-        ],
+        actions: getAppbarWidgets(context),
       ),
       body: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 500, maxHeight: 500),
           child: GestureDetector(
-            onHorizontalDragDown: isSolved()
+            onHorizontalDragDown: solved
                 ? null
-                : (d) {
-                    stopwatch.start();
-                    gridXStart = containerKey.globalPaintBounds.left;
-                    tileSize = (containerKey.globalPaintBounds.right -
-                            containerKey.globalPaintBounds.left) /
-                        puzzleDim;
-                    prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
-                    prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+                : (DragDownDetails d) {
+                    onDragDownCommon(d);
                     verticalDownYPosition = d.globalPosition.dy;
 
                     newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
                     newRow = clamp(newRow, 0, puzzleDim);
                   },
-            onVerticalDragDown: isSolved()
+            onVerticalDragDown: solved
                 ? null
-                : (d) {
-                    stopwatch.start();
-                    gridYStart = containerKey.globalPaintBounds.top;
-                    tileSize = (containerKey.globalPaintBounds.right -
-                            containerKey.globalPaintBounds.left) /
-                        puzzleDim;
-                    prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
-                    prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+                : (DragDownDetails d) {
+                    onDragDownCommon(d);
                     horizontalDownXPosition = d.globalPosition.dx;
 
                     newCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
                     newCol = clamp(newCol, 0, puzzleDim);
                   },
-            onHorizontalDragEnd: isSolved()
+            onHorizontalDragEnd: solved
                 ? null
-                : (details) {
+                : (DragEndDetails d) {
                     if (prevCol != newCol) {
                       setState(() {
                         rowOffset(newRow, newCol - prevCol);
@@ -309,36 +207,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       prevCol = newCol;
                     }
-                    setState(() {
-                      bool prevSolved = solved;
-                      solved = isSolved();
-                      if (!prevSolved && solved) {
-                        stopwatch.stop();
-                      }
-                    });
-                    resetOffsets();
+                    onDragEnd();
                   },
-            onVerticalDragEnd: isSolved()
+            onVerticalDragEnd: solved
                 ? null
-                : (details) {
+                : (DragEndDetails d) {
                     if (newRow != prevRow) {
                       setState(() {
                         columnOffset(newCol, newRow - prevRow);
                       });
                       prevRow = newRow;
                     }
-                    setState(() {
-                      bool prevSolved = solved;
-                      solved = isSolved();
-                      if (!prevSolved && solved) {
-                        stopwatch.stop();
-                      }
-                    });
-                    resetOffsets();
+                    onDragEnd();
                   },
-            onHorizontalDragUpdate: isSolved()
+            onHorizontalDragUpdate: solved
                 ? null
-                : (d) {
+                : (DragUpdateDetails d) {
                     var positionRelativeToLeft =
                         d.globalPosition.dx - gridXStart;
                     newCol = positionRelativeToLeft >= 0
@@ -359,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       wrapAroundHorizontal(totalShifted);
                     });
                   },
-            onVerticalDragUpdate: isSolved()
+            onVerticalDragUpdate: solved
                 ? null
                 : (DragUpdateDetails d) {
                     var positionRelativeToTop =
@@ -385,47 +269,32 @@ class _MyHomePageState extends State<MyHomePage> {
               shrinkWrap: true,
               primary: true,
               crossAxisCount: puzzleDim,
-              children: tileValues.map((e) {
-                int intensity = 100 - 90 ~/ (puzzleDim * puzzleDim) * e;
-                return Transform.translate(
-                  offset: offsets[e - 1],
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.move,
-                    onExit: (event) => {
-                      setState(() {
-                        hoveringOver = -1;
-                      })
-                    },
-                    onHover: (event) => {
-                      setState(() {
-                        hoveringOver = e;
-                      })
-                    },
-                    opaque: false,
-                    child: Container(
-                      margin: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white70,
-                              width: hoveringOver == e ? 4 : 0.5),
-                          color: new Color.fromRGBO(
-                              solved ? intensity ~/ 1.5 : intensity,
-                              intensity,
-                              solved ? intensity ~/ 1.5 : intensity,
-                              1),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child: Center(
-                          child: FittedBox(
-                        child: Text(
-                          e.toString(),
-                          style: TextStyle(fontSize: 35),
+              children: tileValues
+                  .map((e) => Transform.translate(
+                        offset: offsets[e - 1],
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.move,
+                          onExit: (event) => {
+                            setState(() {
+                              hoveringOver = -1;
+                            })
+                          },
+                          onHover: (event) => {
+                            setState(() {
+                              hoveringOver = e;
+                            })
+                          },
+                          opaque: false,
+                          child: Cell(
+                            hoveringOver: hoveringOver == e,
+                            solved: solved,
+                            colorIntensity:
+                                100 - 90 ~/ (puzzleDim * puzzleDim) * e,
+                            label: e.toString(),
+                          ),
                         ),
-                        fit: BoxFit.fitWidth,
-                      )),
-                    ),
-                  ),
-                );
-              }).toList(),
+                      ))
+                  .toList(),
             ),
           ),
         ),
@@ -433,27 +302,126 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void onDragDownCommon(DragDownDetails d) {
+    stopwatch.start();
+    gridYStart = containerKey.globalPaintBounds.top;
+    gridXStart = containerKey.globalPaintBounds.left;
+    tileSize = (containerKey.globalPaintBounds.right -
+            containerKey.globalPaintBounds.left) /
+        puzzleDim;
+    prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
+    prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+  }
+
+  List<Widget> getAppbarWidgets(BuildContext context) {
+    return <Widget>[
+      if (!solved)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MaterialButton(
+            color: Colors.red,
+            onPressed: () {
+              setState(() {
+                reset();
+              });
+            },
+            child: Text("I give up!"),
+          ),
+        ),
+      if (solved)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MaterialButton(
+            color: Colors.green,
+            onPressed: () {
+              setState(() {
+                scramble();
+              });
+            },
+            child: Text("Play"),
+          ),
+        ),
+      Tooltip(
+        message: "Instructions",
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              return showDialog<void>(
+                context: context,
+                barrierDismissible: false, // user must tap button!
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Instructions'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text(
+                              'The grid of numbers exists on a torus. Your goal is to swipe them until they are sorted in ascending order, left to right, top to bottom.'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Got it!'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Icon(
+              Icons.info,
+            ),
+          ),
+        ),
+      ),
+      PopupMenuButton<int>(
+        onSelected: (value) => {
+          setState(() {
+            puzzleDim = value;
+            reset();
+            resetOffsets();
+          })
+        },
+        itemBuilder: (BuildContext context) {
+          return puzzleDimOptions.map((dim) {
+            return PopupMenuItem<int>(
+                value: dim, child: Text(dim.toString() + "x" + dim.toString()));
+          }).toList();
+        },
+      ),
+    ];
+  }
+
+  void onDragEnd() {
+    setState(() {
+      bool prevSolved = solved;
+      solved = isSolved();
+      if (!prevSolved && solved) {
+        stopwatch.stop();
+      }
+    });
+    resetOffsets();
+  }
+
   void wrapAroundVertical(double totalShifted) {
     if (totalShifted > 0) {
       for (int row = 0; row < puzzleDim; row++) {
-        while (
-            offsets[tileValues[row * puzzleDim + newCol] - 1]
-                        .dy +
-                    row * tileSize >
-                puzzleDim * tileSize - tileSize / 2) {
-          offsets[tileValues[row * puzzleDim + newCol] - 1] -=
-              Offset(0, puzzleDim * tileSize);
+        var tileIndex = tileValues[row * puzzleDim + newCol] - 1;
+        while (offsets[tileIndex].dy + row * tileSize >
+            puzzleDim * tileSize - tileSize / 2) {
+          offsets[tileIndex] -= Offset(0, puzzleDim * tileSize);
         }
       }
     } else {
       for (int row = 0; row < puzzleDim; row++) {
-        while (
-            offsets[tileValues[row * puzzleDim + newCol] - 1]
-                        .dy +
-                    row * tileSize <
-                -tileSize / 2) {
-          offsets[tileValues[row * puzzleDim + newCol] - 1] +=
-              Offset(0, puzzleDim * tileSize);
+        var tileIndex = tileValues[row * puzzleDim + newCol] - 1;
+        while (offsets[tileIndex].dy + row * tileSize < -tileSize / 2) {
+          offsets[tileIndex] += Offset(0, puzzleDim * tileSize);
         }
       }
     }
@@ -462,24 +430,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void wrapAroundHorizontal(double totalShifted) {
     if (totalShifted > 0) {
       for (int col = 0; col < puzzleDim; col++) {
-        while (
-            offsets[tileValues[col + puzzleDim * newRow] - 1]
-                        .dx +
-                    col * tileSize >
-                puzzleDim * tileSize - tileSize / 2) {
-          offsets[tileValues[col + puzzleDim * newRow] - 1] -=
-              Offset(puzzleDim * tileSize, 0);
+        var tileIndex = tileValues[col + puzzleDim * newRow] - 1;
+        while (offsets[tileIndex].dx + col * tileSize >
+            puzzleDim * tileSize - tileSize / 2) {
+          offsets[tileIndex] -= Offset(puzzleDim * tileSize, 0);
         }
       }
     } else {
       for (int col = 0; col < puzzleDim; col++) {
-        while (
-            offsets[tileValues[col + puzzleDim * newRow] - 1]
-                        .dx +
-                    col * tileSize <
-                -tileSize / 2) {
-          offsets[tileValues[col + puzzleDim * newRow] - 1] +=
-              Offset(puzzleDim * tileSize, 0);
+        var tileIndex = tileValues[col + puzzleDim * newRow] - 1;
+        while (offsets[tileIndex].dx + col * tileSize < -tileSize / 2) {
+          offsets[tileIndex] += Offset(puzzleDim * tileSize, 0);
         }
       }
     }
