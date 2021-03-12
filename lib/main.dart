@@ -49,7 +49,7 @@ String formatTime(int ms) {
   return "$minutes:$seconds.$msecs";
 }
 
-int clamp(int val, int minInclusive, int maxExclusive) {
+num clamp(num val, num minInclusive, num maxExclusive) {
   if (val < minInclusive) return minInclusive;
   if (val >= maxExclusive) return maxExclusive - 1;
   return val;
@@ -63,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Timer timer;
 
   //for logic involving tile shifts
+  double verticalDownYPosition = 0;
+  double horizontalDownXPosition = 0;
   int prevRow = 0;
   int newRow = 0;
   int prevCol = 0;
@@ -131,10 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void columnOffset(int column, int offset) {
-    offset %= puzzleDim;
-    if (offset < 0) {
+    while (offset < 0) {
       offset += puzzleDim;
     }
+    offset %= puzzleDim;
+
     List<int> oldIndices =
         new List<int>.generate(puzzleDim, (i) => i * puzzleDim + column);
     List<int> rotatedIndices = oldIndices.sublist(offset)
@@ -148,10 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void rowOffset(int row, int offset) {
-    offset %= puzzleDim;
-    if (offset < 0) {
+    while (offset < 0) {
       offset += puzzleDim;
     }
+    offset %= puzzleDim;
 
     List<int> oldIndices =
         new List<int>.generate(puzzleDim, (i) => i + puzzleDim * row);
@@ -248,7 +251,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onSelected: (value) => {
               setState(() {
                 puzzleDim = value;
-                scramble();
+                reset();
+                resetOffsets();
               })
             },
             itemBuilder: (BuildContext context) {
@@ -275,6 +279,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         puzzleDim;
                     prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
                     prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+                    verticalDownYPosition = d.globalPosition.dy;
+
+                    newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
+                    newRow = clamp(newRow, 0, puzzleDim);
                   },
             onVerticalDragDown: isSolved()
                 ? null
@@ -286,40 +294,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         puzzleDim;
                     prevCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
                     prevRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
-                  },
-            onHorizontalDragEnd: (details) {
-              if (prevCol != newCol) {
-                setState(() {
-                  rowOffset(newRow, newCol - prevCol);
-                });
+                    horizontalDownXPosition = d.globalPosition.dx;
 
-                prevCol = newCol;
-              }
-              resetOffsets();
-            },
-            onVerticalDragEnd: (details) {
-              if (newRow != prevRow) {
-                setState(() {
-                  columnOffset(newCol, newRow - prevRow);
-                });
-                prevRow = newRow;
-              }
-              resetOffsets();
-            },
-            onHorizontalDragUpdate: isSolved()
-                ? null
-                : (d) {
-                    newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
-                    newRow = clamp(newRow, 0, puzzleDim);
                     newCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
                     newCol = clamp(newCol, 0, puzzleDim);
-                    setState(() {
-                      for (int i in new List<int>.generate(
-                          puzzleDim, (i) => i + puzzleDim * newRow)) {
-                        offsets[tileValues[i] - 1] += Offset(d.delta.dx, 0);
-                      }
-                    });
+                  },
+            onHorizontalDragEnd: isSolved()
+                ? null
+                : (details) {
+                    if (prevCol != newCol) {
+                      setState(() {
+                        rowOffset(newRow, newCol - prevCol);
+                      });
 
+                      prevCol = newCol;
+                    }
                     setState(() {
                       bool prevSolved = solved;
                       solved = isSolved();
@@ -327,29 +316,68 @@ class _MyHomePageState extends State<MyHomePage> {
                         stopwatch.stop();
                       }
                     });
+                    resetOffsets();
                   },
-            onVerticalDragUpdate: (d) {
-              newRow = ((d.globalPosition.dy - gridYStart) ~/ tileSize);
-              newRow = clamp(newRow, 0, puzzleDim);
+            onVerticalDragEnd: isSolved()
+                ? null
+                : (details) {
+                    if (newRow != prevRow) {
+                      setState(() {
+                        columnOffset(newCol, newRow - prevRow);
+                      });
+                      prevRow = newRow;
+                    }
+                    setState(() {
+                      bool prevSolved = solved;
+                      solved = isSolved();
+                      if (!prevSolved && solved) {
+                        stopwatch.stop();
+                      }
+                    });
+                    resetOffsets();
+                  },
+            onHorizontalDragUpdate: isSolved()
+                ? null
+                : (d) {
+                    var positionRelativeToLeft =
+                        d.globalPosition.dx - gridXStart;
+                    newCol = positionRelativeToLeft >= 0
+                        ? ((positionRelativeToLeft) ~/ tileSize)
+                        : ((positionRelativeToLeft -
+                                tileSize) ~/ //go DOWN towards nearest tileSize increment
+                            tileSize);
 
-              newCol = ((d.globalPosition.dx - gridXStart) ~/ tileSize);
-              newCol = clamp(newCol, 0, puzzleDim);
-              setState(() {
-                for (int i in new List<int>.generate(
-                    puzzleDim, (i) => i * puzzleDim + newCol)) {
-                  offsets[tileValues[i] - 1] += Offset(0, d.delta.dy);
-                }
-              //TODO: when sliding, make the other side re-appear
-              });
+                    double totalShifted =
+                        d.globalPosition.dx - horizontalDownXPosition;
+                    setState(() {
+                      for (int i = 0; i < puzzleDim; i++) {
+                        offsets[tileValues[i + puzzleDim * newRow] - 1] =
+                            Offset(
+                                d.globalPosition.dx - horizontalDownXPosition,
+                                0);
+                      }
+                      wrapAroundHorizontal(totalShifted);
+                    });
+                  },
+            onVerticalDragUpdate: isSolved()
+                ? null
+                : (DragUpdateDetails d) {
+                    var positionRelativeToTop =
+                        (d.globalPosition.dy - gridYStart);
+                    newRow = positionRelativeToTop >= 0
+                        ? positionRelativeToTop ~/ tileSize
+                        : (positionRelativeToTop - tileSize) ~/ tileSize;
+                    double totalShifted =
+                        d.globalPosition.dy - verticalDownYPosition;
 
-              setState(() {
-                bool prevSolved = solved;
-                solved = isSolved();
-                if (!prevSolved && solved) {
-                  stopwatch.stop();
-                }
-              });
-            },
+                    setState(() {
+                      for (int i = 0; i < puzzleDim; i++) {
+                        offsets[tileValues[i * puzzleDim + newCol] - 1] =
+                            Offset(0, totalShifted);
+                      }
+                      wrapAroundVertical(totalShifted);
+                    });
+                  },
             child: GridView.count(
               physics: ClampingScrollPhysics(),
               key: containerKey,
@@ -403,5 +431,57 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void wrapAroundVertical(double totalShifted) {
+    if (totalShifted > 0) {
+      for (int row = 0; row < puzzleDim; row++) {
+        while (
+            offsets[tileValues[row * puzzleDim + newCol] - 1]
+                        .dy +
+                    row * tileSize >
+                puzzleDim * tileSize - tileSize / 2) {
+          offsets[tileValues[row * puzzleDim + newCol] - 1] -=
+              Offset(0, puzzleDim * tileSize);
+        }
+      }
+    } else {
+      for (int row = 0; row < puzzleDim; row++) {
+        while (
+            offsets[tileValues[row * puzzleDim + newCol] - 1]
+                        .dy +
+                    row * tileSize <
+                -tileSize / 2) {
+          offsets[tileValues[row * puzzleDim + newCol] - 1] +=
+              Offset(0, puzzleDim * tileSize);
+        }
+      }
+    }
+  }
+
+  void wrapAroundHorizontal(double totalShifted) {
+    if (totalShifted > 0) {
+      for (int col = 0; col < puzzleDim; col++) {
+        while (
+            offsets[tileValues[col + puzzleDim * newRow] - 1]
+                        .dx +
+                    col * tileSize >
+                puzzleDim * tileSize - tileSize / 2) {
+          offsets[tileValues[col + puzzleDim * newRow] - 1] -=
+              Offset(puzzleDim * tileSize, 0);
+        }
+      }
+    } else {
+      for (int col = 0; col < puzzleDim; col++) {
+        while (
+            offsets[tileValues[col + puzzleDim * newRow] - 1]
+                        .dx +
+                    col * tileSize <
+                -tileSize / 2) {
+          offsets[tileValues[col + puzzleDim * newRow] - 1] +=
+              Offset(puzzleDim * tileSize, 0);
+        }
+      }
+    }
   }
 }
