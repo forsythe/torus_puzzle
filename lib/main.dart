@@ -145,17 +145,22 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     offset %= puzzleDim;
     List<int> oldIndices = new List<int>.generate(puzzleDim, indexGenerator);
-    rotationBuffer.clear();
-    for (int i in oldIndices) {
-      rotationBuffer.putIfAbsent(i, () => tileValues[i]);
-    }
 
-    List<int> newTileValues = List.from(tileValues);
-    for (int k = 0; k < puzzleDim; k++) {
-      newTileValues[oldIndices[(k + offset) % puzzleDim]] =
-          rotationBuffer[oldIndices[k]];
+    //https://stackoverflow.com/questions/23321216/rotating-an-array-using-juggling-algorithm
+    int numCycles = oldIndices.length.gcd(offset);
+    int cycleLength = oldIndices.length ~/ numCycles;
+    print(oldIndices);
+    for (int i = 0; i < numCycles; i++) {
+      int cycleIndexCursor = i;
+      int cycleStartVal = tileValues[oldIndices[cycleIndexCursor]];
+      for (int cycleItem = 0; cycleItem < cycleLength - 1; cycleItem++) {
+        int sourceIndex = oldIndices[(cycleIndexCursor - offset) %
+            oldIndices.length]; //can be neg, but % in dart supports neg num
+        tileValues[oldIndices[cycleIndexCursor]] = tileValues[sourceIndex];
+        cycleIndexCursor = (cycleIndexCursor - offset) % oldIndices.length;
+      }
+      tileValues[oldIndices[cycleIndexCursor]] = cycleStartVal;
     }
-    tileValues = newTileValues;
   }
 
   void columnOffset(int column, int offset) {
