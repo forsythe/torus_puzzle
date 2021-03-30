@@ -4,3 +4,6 @@ Recreating the torus puzzle in Exponential Idle in flutter, for fun. Copy conten
  
  # Running locally
 `flutter run -d web-server --web-port 8080 --web-hostname 0.0.0.0`
+
+# Play
+https://forsythe.github.io/torus_puzzle/
